@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>梦幻泡泡砖块 | Sparkle Bricks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <link href="./styles/main.css" rel="stylesheet">
+    <style>
+        /* 添加移动设备专用样式 */
+        @media (max-width: 768px) {
+            #gameContainer {
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                overflow: hidden;
+            }
+            
+            #gameCanvas {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                max-width: 95%;
+                max-height: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- 游戏UI -->
+        <div class="game-ui" id="scorePanel">
+            ★ 得分: <span id="score">0</span>
+        </div>
+        <div class="game-ui" id="coinPanel">
+            🪙 <span id="coins">0</span>
+        </div>
+
+        <!-- 开始菜单 -->
+        <div id="startMenu">
+            <h1>✨梦幻泡泡砖块✨</h1>
+            <button class="game-btn" id="startBtn">开始游戏</button>
+            <button class="game-btn" id="howToPlayBtn">游戏说明</button>
+            <button class="game-btn" id="rankingBtn">排行榜</button>
+        </div>
+
+        <!-- 暂停菜单 -->
+        <div id="pauseMenu">
+            <button class="game-btn" id="resumeBtn">继续游戏</button>
+            <button class="game-btn" id="restartBtn">重新开始</button>
+            <button class="game-btn" id="mainMenuBtn">返回主菜单</button>
+        </div>
+        
+        <!-- 游戏说明 -->
+        <div id="howToPlay">
+            <h2>游戏说明</h2>
+            <p>使用鼠标左右移动控制挡板位置。</p>
+            <p>点击鼠标可以激活激光功能（如果已获得）。</p>
+            <p>也可以使用键盘左右箭头移动挡板。</p>
+            <p>按ESC键暂停游戏。</p>
+            <p>在手机上用手指左右滑动控制挡板。</p>
+            <p>点击调试按钮可以开启调试模式。</p>
+            <button class="game-btn" id="closeHowToPlayBtn">关闭说明</button>
+        </div>
+        
+        <!-- 游戏状态信息面板 -->
+        <div id="gameDebugInfo"></div>
+    </div>
+
+    <!-- 工具类库 - 非模块方式加载 -->
+    <script src="./js/utils.js"></script>
+    <script src="./js/levels.js"></script>
+    <script src="./js/ball.js"></script>
+    <script src="./js/player.js"></script>
+    <script src="./js/powerups.js"></script>
+    <script src="./js/score.js"></script>
+    <script src="./js/game.js"></script>
+    
+    <!-- 初始化游戏 -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // 确保所有资源加载完成后再初始化游戏
+            console.log('开始初始化游戏...');
+            
+            // 禁用页面缩放和滚动
+            document.addEventListener('touchmove', function(e) {
+                if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            // 防止双击缩放
+            document.addEventListener('dblclick', function(e) {
+                e.preventDefault();
+            }, { passive: false });
+            
+            // 使游戏画布保持适当大小
+            function resizeCanvas() {
+                const gameContainer = document.getElementById('gameContainer');
+                const canvas = document.getElementById('gameCanvas');
+                if (!canvas) return;
+                
+                const maxWidth = Math.min(600, window.innerWidth - 20);
+                const maxHeight = window.innerHeight - 20;
+                
+                // 设置初始大小
+                canvas.width = maxWidth;
+                canvas.height = maxHeight * 0.8;
+                
+                console.log('画布大小已调整:', canvas.width, 'x', canvas.height);
+            }
+            
+            // 初始调整大小
+            resizeCanvas();
+            
+            // 监听窗口大小变化
+            window.addEventListener('resize', resizeCanvas);
+            
+            // 创建游戏实例
+            try {
+                window.game = new BrickGame();
+                console.log('游戏初始化成功!');
+            } catch (error) {
+                console.error('游戏初始化失败:', error);
+                alert('游戏加载失败，请刷新页面重试: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

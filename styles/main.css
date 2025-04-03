@@ -1,0 +1,305 @@
+/* src/styles/main.css */
+/* 基础重置与字体定义 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    touch-action: manipulation; /* 优化移动端触摸响应 */
+    -webkit-tap-highlight-color: transparent; /* 移除iOS上触摸时的高亮效果 */
+    user-select: none; /* 防止文本选择 */
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed; /* 防止移动端上的弹性滚动 */
+}
+
+body {
+    background: linear-gradient(135deg, #ffb7d5 0%, #ff8fab 100%);
+    font-family: 'Poppins', 'Ma Shan Zheng', sans-serif;
+    /* 增加备用字体 */
+    font-family: 'Ma Shan Zheng', cursive, 'Microsoft YaHei';
+    color: #fff;
+    height: 100vh;
+}
+
+/* 游戏容器响应式处理 */
+#gameContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 600px; /* 大屏设备最大宽度限制 */
+    margin: 0 auto;
+    touch-action: none; /* 防止浏览器处理触摸事件 */
+}
+
+#gameCanvas {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(255, 145, 175, 0.3);
+    backdrop-filter: blur(5px);
+    display: block;
+    touch-action: none;
+    cursor: default; /* 确保鼠标指针正常 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 90vh;
+    max-width: 95vw;
+}
+
+/* 响应式UI面板 */
+.game-ui {
+    position: absolute;
+    padding: 0.8rem 1.2rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 12px rgba(255, 145, 175, 0.2);
+    font-size: 1rem;
+    z-index: 10; /* 确保UI在游戏画布上层 */
+}
+
+#scorePanel {
+    top: 1.5rem;
+    left: 1.5rem;
+}
+
+#coinPanel {
+    top: 1.5rem;
+    right: 1.5rem;
+}
+
+/* 自适应按钮系统 */
+.game-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 2rem;
+    background: linear-gradient(45deg, #ff85a2, #ff6b9d);
+    color: white;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 105, 157, 0.3);
+    margin: 0.5rem;
+    width: 160px; /* 固定宽度保证按钮统一 */
+    display: inline-block; /* 确保按钮正确显示 */
+}
+
+.game-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 105, 157, 0.4);
+}
+
+.game-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(255, 105, 157, 0.2);
+}
+
+/* 每日挑战提示样式 */
+.challenge-notice {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 215, 0, 0.9);
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    animation: pulse 2s infinite;
+}
+  
+.challenge-notice h3 {
+    color: #8B4513;
+    margin-bottom: 0.5rem;
+}
+  
+.challenge-notice p {
+    color: #333;
+    margin: 0.3rem 0;
+}
+  
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+  
+/* 挑战进度条 */
+.challenge-progress {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 8px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    overflow: hidden;
+}
+  
+.challenge-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    transition: width 0.3s ease;
+}
+
+/* 菜单系统 */
+#startMenu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 2rem;
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    width: 85%;
+    max-width: 400px;
+    display: block; /* 确保菜单正确显示 */
+}
+
+#pauseMenu {
+    display: none;          /* 默认隐藏 */
+    position: absolute;
+    top: 50%;               /* 居中显示 */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7); /* 半透明背景 */
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;     /* 居中按钮 */
+    z-index: 1000;          /* 确保在最顶层 */
+}
+
+/* 游戏说明样式 */
+#howToPlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+    z-index: 1000;
+    display: none; /* 默认隐藏 */
+    max-width: 500px;
+    width: 90%;
+}
+
+#howToPlay h2 {
+    color: #ff6b9d;
+    margin-bottom: 1rem;
+}
+
+#howToPlay p {
+    margin: 0.8rem 0;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(255, 105, 157, 0.3);
+}
+
+/* 特效动画 */
+@keyframes twinkle {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(3); opacity: 0; }
+}
+
+.effect-star {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: url('../assets/star.png') no-repeat center/contain;
+    animation: twinkle 1s ease-out;
+}
+
+/* 调试信息面板 */
+#gameDebugInfo {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 12px;
+    max-width: 300px;
+    display: none; /* 默认隐藏，调试模式下显示 */
+    z-index: 1000;
+}
+
+/* 移动端优化适配 */
+@media screen and (max-width: 480px) {
+    html {
+        font-size: 14px; /* 小屏缩小基准字体 */
+    }
+
+    .game-btn {
+        width: 140px;
+        padding: 0.7rem 1.2rem;
+        font-size: 1rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    #gameCanvas {
+        border-radius: 15px;
+        max-width: 100%;
+    }
+
+    .game-ui {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    #scorePanel {
+        top: 0.8rem;
+        left: 0.8rem;
+    }
+    
+    #coinPanel {
+        top: 0.8rem;
+        right: 0.8rem;
+    }
+}
+
+@media screen and (max-height: 600px) {
+    #startMenu {
+        padding: 1.5rem;
+        top: 45%;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* 横屏优化 */
+@media screen and (orientation: landscape) {
+    #gameContainer {
+        max-width: 100%;
+    }
+    
+    #gameCanvas {
+        height: 90vh;
+    }
+}
